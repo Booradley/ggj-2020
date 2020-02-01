@@ -7,8 +7,8 @@ namespace EmeraldActivities.CubimalRacing
     public class Key : MonoBehaviour
     {
         private const float MIN_WIND_AMOUNT = 0;
-        private const float MAX_WIND_AMOUNT = 1800f; // 5 full rotations
-        private const float UNWIND_AMOUNT_PER_SECOND = 90f;
+        private const float MAX_WIND_AMOUNT = 1080f; // 3 full rotations
+        private const float UNWIND_AMOUNT_PER_SECOND = 180f;
         
         public enum KeyState
         {
@@ -20,18 +20,18 @@ namespace EmeraldActivities.CubimalRacing
         private float _windAmount = 0;
         public float WindAmount => _windAmount;
         public float NormalisedWindAmount => _windAmount / MAX_WIND_AMOUNT;
+        public float UnwindSeconds => _windAmount / UNWIND_AMOUNT_PER_SECOND;
 
         private KeyState _state = KeyState.Windable;
         public KeyState State => _state;
 
         private Hand.AttachmentFlags _attachmentFlags = Hand.AttachmentFlags.DetachOthers
-                                                        & Hand.AttachmentFlags.DetachFromOtherHand
-                                                        & Hand.AttachmentFlags.TurnOnKinematic;
+                                                        | Hand.AttachmentFlags.DetachFromOtherHand
+                                                        | Hand.AttachmentFlags.TurnOnKinematic;
 
         private Interactable _interactable;
         private Hand _grabbingHand;
         private Quaternion _grabOffset;
-        private float _unwindAmountPerSecond;
 
         private void Awake()
         {
@@ -78,15 +78,14 @@ namespace EmeraldActivities.CubimalRacing
             }
             else if (_state == KeyState.Unwinding)
             {
-                _windAmount = Mathf.Clamp(_windAmount - (_unwindAmountPerSecond * Time.deltaTime), MIN_WIND_AMOUNT, MAX_WIND_AMOUNT);
+                _windAmount = Mathf.Clamp(_windAmount - (UNWIND_AMOUNT_PER_SECOND * Time.deltaTime), MIN_WIND_AMOUNT, MAX_WIND_AMOUNT);
 
-                transform.localRotation = transform.localRotation * Quaternion.Euler(new Vector3(0f, 0f, _windAmount));
+                transform.localRotation = Quaternion.Euler(new Vector3(0f, 0f, -_windAmount));
             }
         }
 
-        public void StartUnwinding(float normalizedSpeed)
+        public void StartUnwinding()
         {
-            _unwindAmountPerSecond = UNWIND_AMOUNT_PER_SECOND * normalizedSpeed;
             _state = KeyState.Unwinding;
         }
 
