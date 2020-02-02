@@ -1,5 +1,19 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!64 &8718965451199191309
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8778785023490095522}
+  m_Material: {fileID: 13400000, guid: 37a8558a682e8ea46af99351efcb1878, type: 2}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 8885170393709887075, guid: a160bb733143afe40b836c4e244ad8b0, type: 3}
 --- !u!64 &8718965451199191308
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -7,7 +21,7 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 312398926612297685}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 37a8558a682e8ea46af99351efcb1878, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -21,26 +35,12 @@ BoxCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1750810527573751311}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 37a8558a682e8ea46af99351efcb1878, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 0.20086122, y: 0.20086122, z: 0.20272377}
   m_Center: {x: 0, y: 0, z: -0.00093127415}
---- !u!64 &8718965451199191309
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8778785023490095522}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 8885170393709887075, guid: a160bb733143afe40b836c4e244ad8b0, type: 3}
 --- !u!1001 &6877967959800758159
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -180,6 +180,12 @@ PrefabInstance:
       propertyPath: m_Center.y
       value: -0.004903771
       objectReference: {fileID: 0}
+    - target: {fileID: 2027649394048866732, guid: ce0b7958812343a47a9abb4c52ab633b,
+        type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 13400000, guid: 37a8558a682e8ea46af99351efcb1878,
+        type: 2}
     - target: {fileID: 3840442380990870312, guid: ce0b7958812343a47a9abb4c52ab633b,
         type: 3}
       propertyPath: m_Name

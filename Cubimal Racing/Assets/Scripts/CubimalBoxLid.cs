@@ -6,6 +6,8 @@ namespace EmeraldActivities.CubimalRacing
 {
     public class CubimalBoxLid : MonoBehaviour
     {
+        public Action OnLidHovered;
+        public Action OnLidUnhovered;
         public Action OnLidGrabbed;
         
         private Interactable _interactable;
@@ -14,6 +16,16 @@ namespace EmeraldActivities.CubimalRacing
         private void Awake()
         {
             _interactable = GetComponent<Interactable>();
+        }
+
+        private void OnHandHoverBegin(Hand hand)
+        {
+            OnLidHovered?.Invoke();
+        }
+
+        private void OnHandHoverEnd(Hand hand)
+        {
+            OnLidUnhovered?.Invoke();
         }
         
         private void HandHoverUpdate(Hand hand)
