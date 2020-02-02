@@ -62,6 +62,7 @@ namespace EmeraldActivities.CubimalRacing
 
                 _grabbingHand = null;
                 _state = KeyState.Windable;
+                Debug.Log(_windAmount);
             }
         }
 
@@ -70,11 +71,13 @@ namespace EmeraldActivities.CubimalRacing
             if (_state == KeyState.Winding)
             {
                 Vector3 angularVelocity = _grabbingHand.GetTrackedObjectAngularVelocity();
-                angularVelocity.x = 0f;
-                angularVelocity.y = 0f;
-                transform.localRotation = transform.localRotation * Quaternion.Euler(angularVelocity);
+                Vector3 localAngularVelocity = transform.InverseTransformDirection(angularVelocity);
                 
-                _windAmount = Mathf.Clamp(_windAmount + -angularVelocity.z, MIN_WIND_AMOUNT, MAX_WIND_AMOUNT);
+                localAngularVelocity.x = 0f;
+                localAngularVelocity.y = 0f;
+                transform.localRotation = transform.localRotation * Quaternion.Euler(localAngularVelocity);
+                
+                _windAmount = Mathf.Clamp(_windAmount + -localAngularVelocity.z, MIN_WIND_AMOUNT, MAX_WIND_AMOUNT);
             }
             else if (_state == KeyState.Unwinding)
             {
@@ -87,11 +90,13 @@ namespace EmeraldActivities.CubimalRacing
         public void StartUnwinding()
         {
             _state = KeyState.Unwinding;
+            Debug.Log(_windAmount);
         }
 
         public void StopUnwinding()
         {
             _state = KeyState.Windable;
+            Debug.Log(_windAmount);
         }
     }
 }

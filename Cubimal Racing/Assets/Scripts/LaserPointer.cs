@@ -1,6 +1,8 @@
+using System;
 using UnityEngine;
 using Valve.VR;
 using Valve.VR.Extras;
+using Object = UnityEngine.Object;
 
 namespace EmeraldActivities.CubimalRacing
 {
@@ -40,11 +42,7 @@ namespace EmeraldActivities.CubimalRacing
             holder = new GameObject();
             holder.transform.parent = this.transform;
             holder.transform.localPosition = Vector3.zero;
-            
-            // z is not forward here
-            Vector3 holderOffset = Vector3.zero;
-            holderOffset.x = pointDirectionOffset.z;
-            holder.transform.localRotation = Quaternion.identity * Quaternion.Euler(holderOffset);
+            holder.transform.localRotation = Quaternion.identity;
 
             pointer = GameObject.CreatePrimitive(PrimitiveType.Cube);
             pointer.transform.parent = holder.transform;
@@ -102,7 +100,7 @@ namespace EmeraldActivities.CubimalRacing
 
             float dist = 100f;
 
-            Ray raycast = new Ray(transform.position, transform.forward + pointDirectionOffset);
+            Ray raycast = new Ray(transform.position, transform.forward);
             RaycastHit hit;
             bool bHit = Physics.Raycast(raycast, out hit);
 

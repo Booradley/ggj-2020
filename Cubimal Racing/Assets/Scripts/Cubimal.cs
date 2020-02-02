@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
@@ -7,18 +6,16 @@ using Random = UnityEngine.Random;
 
 namespace EmeraldActivities.CubimalRacing
 {
-    [RequireComponent(typeof(NavMeshAgent))]
-    [RequireComponent(typeof(Rigidbody))]
-    [RequireComponent(typeof(Animator))]
     public class Cubimal : MonoBehaviour
     {
-        private const float SETTLE_TIME = 3f;
-        private const float MAX_DISTANCE = 10f;
-        private const float MIN_SPEED = 0.5f;
-        private const float MAX_SPEED = 1.5f;
-        private const float DESTINATION_REACHED_DISTANCE = 0.1f;
+        private static readonly int IsRacingBool = Animator.StringToHash("IsRacing");
+        private static readonly int SpawnTrigger = Animator.StringToHash("Spawn");
         
-        private static readonly int IsRacing = Animator.StringToHash("IsRacing");
+        private const float SETTLE_TIME = 3f;
+        private const float MAX_DISTANCE = 5f;
+        private const float MIN_SPEED = 0.5f;
+        private const float MAX_SPEED = 1.0f;
+        private const float DESTINATION_REACHED_DISTANCE = 0.1f;
         
         public enum CubimalState
         {
@@ -54,6 +51,7 @@ namespace EmeraldActivities.CubimalRacing
             }
             
             _state = CubimalState.Held;
+            _currentSettleTime = 0f;
             _isSettling = false;
             
             StopRacing();
@@ -62,6 +60,8 @@ namespace EmeraldActivities.CubimalRacing
         private void OnDetachedFromHand(Hand hand)
         {
             _state = CubimalState.Airborne;
+            _currentSettleTime = 0f;
+            _isSettling = false;
         }
 
         private void OnCollisionEnter(Collision other)
@@ -86,7 +86,7 @@ namespace EmeraldActivities.CubimalRacing
         {
             if (_state == CubimalState.Racing)
             {
-                if (Vector3.Distance(transform.position, _destination) <= DESTINATION_REACHED_DISTANCE)
+                if (Vector3.Distance(transform.position, _destination) <= DESTINATION_REACHED_DISTANCE || !_navMeshAgent.hasPath)
                 {
                     StopRacing();
                 }
@@ -107,11 +107,12 @@ namespace EmeraldActivities.CubimalRacing
                         }
                     }
                 }
-                else
-                {
-                    _currentSettleTime = 0f;
-                }
             }
+        }
+
+        public void Spawn()
+        {
+            _animator.SetTrigger(SpawnTrigger);
         }
 
         private bool CanRace()
@@ -136,7 +137,7 @@ namespace EmeraldActivities.CubimalRacing
                 _stopUnwindingSequence = StartCoroutine(StopUnwinding());
             }
 
-            _animator.SetBool(IsRacing, true);
+            _animator.SetBool(IsRacingBool, true);
             _key.StartUnwinding();
         }
 
@@ -144,7 +145,7 @@ namespace EmeraldActivities.CubimalRacing
         {
             yield return new WaitForSeconds(_key.UnwindSeconds);
             
-            _animator.SetBool(IsRacing, false);
+            _animator.SetBool(IsRacingBool, false);
             _key.StopUnwinding();
             
             _stopUnwindingSequence = null;
@@ -152,8 +153,11 @@ namespace EmeraldActivities.CubimalRacing
 
         private void StopRacing()
         {
+            _state = CubimalState.Settled;
+            _isSettling = false;
+            
             _navMeshAgent.enabled = false;
-            _animator.SetBool(IsRacing, false);
+            _animator.SetBool(IsRacingBool, false);
             
             _key.StopUnwinding();
             _destination = Vector3.zero;
