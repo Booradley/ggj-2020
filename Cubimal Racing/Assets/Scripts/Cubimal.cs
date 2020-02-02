@@ -13,7 +13,7 @@ namespace EmeraldActivities.CubimalRacing
         private static readonly int SpawnTrigger = Animator.StringToHash("Spawn");
         private static readonly int WinRaceTrigger = Animator.StringToHash("WinRace");
         
-        private const float SETTLE_TIME = 3f;
+        private const float SETTLE_TIME = 1.5f;
         private const float MAX_DISTANCE = 5f;
         private const float MIN_SPEED = 0.5f;
         private const float MAX_SPEED = 1.0f;
@@ -29,6 +29,7 @@ namespace EmeraldActivities.CubimalRacing
         }
 
         public Action OnPickedUp;
+        public Action OnStopped;
 
         public bool IsWound => _key.WindAmount > 0f;
         
@@ -235,6 +236,8 @@ namespace EmeraldActivities.CubimalRacing
             
             _key.StopUnwinding();
             _destination = Vector3.zero;
+            
+            OnStopped?.Invoke();
         }
 
         private bool IsStanding()

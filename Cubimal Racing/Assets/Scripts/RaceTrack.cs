@@ -37,9 +37,26 @@ namespace EmeraldActivities.CubimalRacing
             {
                 _cubimal = cubimal;
                 _cubimal.OnPickedUp += HandleCubimalPickedUp;
+                _cubimal.OnStopped += HandleCubimalStopped;
                 
                 _positionSequence = StartCoroutine(PositionCubimalSequence());
             }
+        }
+
+        private void RemoveCubimal()
+        {
+            _state = RaceTrackState.Ready;
+            
+            _cubimal.OnPickedUp -= HandleCubimalPickedUp;
+            _cubimal.OnStopped -= HandleCubimalStopped;
+            _cubimal = null;
+            
+            OnCubimalRemoved?.Invoke();
+        }
+
+        private void HandleCubimalStopped()
+        {
+            RemoveCubimal();
         }
 
         private IEnumerator PositionCubimalSequence()
@@ -79,11 +96,8 @@ namespace EmeraldActivities.CubimalRacing
                 StopCoroutine(_positionSequence);
                 _positionSequence = null;
             }
-            
-            _cubimal.OnPickedUp -= HandleCubimalPickedUp;
-            _cubimal = null;
-            
-            OnCubimalRemoved?.Invoke();
+
+            RemoveCubimal();
         }
 
         public void StartRace()
@@ -98,13 +112,10 @@ namespace EmeraldActivities.CubimalRacing
 
         public void RaceFinished(bool didWin)
         {
-            _state = RaceTrackState.Ready;
-
             if (_cubimal != null)
             {
+                // This removes the cubimal via events
                 _cubimal.FinishRace(didWin);
-                _cubimal.OnPickedUp -= HandleCubimalPickedUp;
-                _cubimal = null;
             }
         }
     }
