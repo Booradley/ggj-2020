@@ -11,6 +11,7 @@ namespace EmeraldActivities.CubimalRacing
         [SerializeField]
         private GameObject _cubimalBoxPrefab;
 
+        private bool _isSpawning = false;
         private CubimalBox _cubimalBox;
 
         private void Awake()
@@ -20,7 +21,12 @@ namespace EmeraldActivities.CubimalRacing
 
         private void SpawnCubimalBox()
         {
-            StartCoroutine(SpawnBoxSequence());
+            if (!_isSpawning)
+            {
+                _isSpawning = true;
+
+                StartCoroutine(SpawnBoxSequence());
+            }
         }
 
         private IEnumerator SpawnBoxSequence()
@@ -29,6 +35,8 @@ namespace EmeraldActivities.CubimalRacing
             
             _cubimalBox = Instantiate(_cubimalBoxPrefab, transform.position, transform.rotation).GetComponent<CubimalBox>();
             _cubimalBox.Spawn();
+
+            _isSpawning = false;
         }
 
         private void Update()
