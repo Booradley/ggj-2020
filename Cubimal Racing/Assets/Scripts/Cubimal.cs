@@ -28,8 +28,8 @@ namespace EmeraldActivities.CubimalRacing
             Racing
         }
 
-        public Action OnPickedUp;
-        public Action OnStopped;
+        public event Action OnPickedUp;
+        public event Action OnStopped;
 
         public bool IsWound => _key.WindAmount > 0f;
         

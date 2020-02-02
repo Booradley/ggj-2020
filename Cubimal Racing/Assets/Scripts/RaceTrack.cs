@@ -12,6 +12,7 @@ namespace EmeraldActivities.CubimalRacing
         public enum RaceTrackState
         {
             Ready,
+            Set,
             Racing
         }
 
@@ -82,6 +83,8 @@ namespace EmeraldActivities.CubimalRacing
                     yield return _cubimal.AutoWind(WIND_SECONDS);
                 }
             }
+
+            _state = RaceTrackState.Set;
             
             if (_cubimal != null)
                 OnCubimalAdded?.Invoke();
@@ -98,6 +101,11 @@ namespace EmeraldActivities.CubimalRacing
             }
 
             RemoveCubimal();
+        }
+
+        public bool IsOccupied()
+        {
+            return (_state == RaceTrackState.Set || _state == RaceTrackState.Racing) && _cubimal != null;
         }
 
         public void StartRace()

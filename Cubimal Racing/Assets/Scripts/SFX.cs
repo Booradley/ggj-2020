@@ -9,6 +9,9 @@ namespace EmeraldActivities.CubimalRacing
         
         [SerializeField] 
         private AudioClip _winRaceSFX;
+        
+        [SerializeField] 
+        private AudioClip _outOfBoundsSFX;
 
         [SerializeField] 
         private Music _music;
@@ -21,6 +24,7 @@ namespace EmeraldActivities.CubimalRacing
 
             CubimalBox.OnOpened += PlayOpenCubimalBox;
             RaceController.OnRaceFinished += PlayRaceFinished;
+            Destroyable.OnOutOfBounds += destroyable => PlayOutOfBounds();
         }
 
         private void PlayOpenCubimalBox()
@@ -33,6 +37,12 @@ namespace EmeraldActivities.CubimalRacing
         {
             _music.FadeOut(_winRaceSFX.length);
             _audioSource.PlayOneShot(_winRaceSFX);
+        }
+
+        private void PlayOutOfBounds()
+        {
+            _music.FadeOut(_outOfBoundsSFX.length);
+            _audioSource.PlayOneShot(_outOfBoundsSFX);
         }
     }
 }

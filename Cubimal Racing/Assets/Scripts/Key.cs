@@ -9,7 +9,7 @@ namespace EmeraldActivities.CubimalRacing
     {
         private const float MIN_WIND_AMOUNT = 0;
         private const float MAX_WIND_AMOUNT = 1080f; // 3 full rotations
-        private const float UNWIND_AMOUNT_PER_SECOND = 180f;
+        private const float UNWIND_AMOUNT_PER_SECOND = 90f;
         private const float AUTO_WIND_AMOUNT_PER_SECOND = 1080f;
         private const float OVER_WIND_PITCH = 2f;
         
@@ -149,6 +149,7 @@ namespace EmeraldActivities.CubimalRacing
 
         public IEnumerator AutoWind(float windSeconds)
         {
+            _audioSource.clip = _windSound;
             _audioSource.pitch = 1f;
             _audioSource.Play();
             
