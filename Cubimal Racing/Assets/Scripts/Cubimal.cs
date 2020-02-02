@@ -35,6 +35,9 @@ namespace EmeraldActivities.CubimalRacing
         [SerializeField]
         private Key _key;
 
+        [SerializeField] 
+        private GameObject _crown;
+
         private NavMeshAgent _navMeshAgent;
         private Animator _animator;
         private Rigidbody _rigidbody;
@@ -49,6 +52,8 @@ namespace EmeraldActivities.CubimalRacing
             _navMeshAgent = GetComponent<NavMeshAgent>();
             _animator = GetComponent<Animator>();
             _rigidbody = GetComponent<Rigidbody>();
+            
+            _crown.SetActive(false);
 
             _key.OnUnwound += HandleKeyUnwound;
         }
@@ -168,6 +173,7 @@ namespace EmeraldActivities.CubimalRacing
             {
                 StopMoving();
                 _animator.SetTrigger(WinRaceTrigger);
+                _crown.SetActive(true);
             }
         }
 
