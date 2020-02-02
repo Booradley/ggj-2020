@@ -4921,6 +4921,7 @@ GameObject:
   - component: {fileID: 7615417512529566694}
   - component: {fileID: 3972598627169964270}
   - component: {fileID: 1374014207590332720}
+  - component: {fileID: 1379620445033343366}
   m_Layer: 0
   m_Name: Cubimal Box
   m_TagString: Untagged
@@ -4962,6 +4963,7 @@ MonoBehaviour:
   - {fileID: 5185647111150854928, guid: 48fa8e2cfea290941baead72a9978844, type: 3}
   - {fileID: 5185647111150854928, guid: bf72365d77574d64a800efe6e08e847a, type: 3}
   - {fileID: 5185647111150854928, guid: 2522f27a1775c4b4dba4505f2610d532, type: 3}
+  - {fileID: 5185647111150854928, guid: 565a2f13d27bfae4685787d4cc854315, type: 3}
   _lid: {fileID: 8225698610758927642}
 --- !u!114 &2690372897201356176
 MonoBehaviour:
@@ -5115,6 +5117,18 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &1379620445033343366
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2634668500792257488}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4223d4d5c9664599b89f54cd342f9c72, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6620081353476253051
 GameObject:
   m_ObjectHideFlags: 0

@@ -49,11 +49,18 @@ namespace EmeraldActivities.CubimalRacing
 
         private void HandleCubimalAdded()
         {
-            if (_state != RaceState.Ready)
-                return;
+            Debug.Log("CUBIMAL ADDED");
             
-            _raceTracksReady++;
-            if (_raceTracksReady == _raceTracks.Length)
+            _raceTracksReady = 0;
+            foreach (RaceTrack raceTrack in _raceTracks)
+            {
+                if (raceTrack.IsOccupied())
+                {
+                    _raceTracksReady++;
+                }
+            }
+            
+            if (_state == RaceState.Ready && _raceTracksReady == _raceTracks.Length)
             {
                 StartRace();
             }
@@ -61,17 +68,29 @@ namespace EmeraldActivities.CubimalRacing
 
         private void HandleCubimalRemoved()
         {
-            _raceTracksReady--;
+            Debug.Log("CUBIMAL REMOVED");
 
-            if (_raceTracksReady == 0 && _state == RaceState.Racing)
+            _raceTracksReady = 0;
+            foreach (RaceTrack raceTrack in _raceTracks)
             {
+                if (raceTrack.IsOccupied())
+                {
+                    _raceTracksReady++;
+                }
+            }
+
+            if (_raceTracksReady == 0)
+            {
+                Debug.Log("FINISH RACE");
+                
                 _state = RaceState.Ready;
-                _raceTracksReady = 0;
             }
         }
 
         private void StartRace()
         {
+            Debug.Log("START RACE");
+
             _state = RaceState.Racing;
             
             foreach (RaceTrack raceTrack in _raceTracks)
@@ -82,12 +101,18 @@ namespace EmeraldActivities.CubimalRacing
 
         private void FinishRace(RaceTrack winningTrack)
         {
+            Debug.Log("WIN RACE");
+            
             _state = RaceState.Ready;
-            _raceTracksReady = 0;
             
             foreach (RaceTrack raceTrack in _raceTracks)
             {
                 raceTrack.RaceFinished(raceTrack == winningTrack);
+            }
+            
+            if (_raceTracksReady == _raceTracks.Length)
+            {
+                StartRace();
             }
             
             OnRaceFinished?.Invoke();
