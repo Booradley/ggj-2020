@@ -87,22 +87,34 @@ namespace EmeraldActivities.CubimalRacing
             _animator.SetTrigger(OpenBool);
             
             Hand hand = _hand;
+            GrabTypes? currentGrabTypes = GrabTypes.None;
+            Hand.AttachmentFlags? currentAttachmentFlags = Hand.AttachmentFlags.ParentToHand 
+                                                           | Hand.AttachmentFlags.TurnOnKinematic 
+                                                           | Hand.AttachmentFlags.DetachFromOtherHand;
+
+            if (hand != null)
+            {
+                currentGrabTypes = hand.currentAttachedObjectInfo?.grabbedWithType;
+                currentAttachmentFlags = hand.currentAttachedObjectInfo?.attachmentFlags;
+            }
             
             yield return new WaitForSeconds(0.25f);
-
-            GrabTypes? currentGrabTypes = hand.currentAttachedObjectInfo?.grabbedWithType;
-            Hand.AttachmentFlags? currentAttachmentFlags = hand.currentAttachedObjectInfo?.attachmentFlags;
             
             Cubimal cubimal = Instantiate(_cubimalPrefabs[Random.Range(0, _cubimalPrefabs.Length)], transform.position, transform.rotation).GetComponent<Cubimal>();
-            cubimal.Spawn();
+            cubimal.Spawn(hand != null);
 
+            if (hand != null)
+            {
+                if (hand.currentAttachedObject == gameObject)
+                    hand.DetachObject(gameObject, true);
+                
+                hand.AttachObject(cubimal.gameObject, currentGrabTypes.GetValueOrDefault(), currentAttachmentFlags.GetValueOrDefault());
+            }
+            
             _particleSystem.transform.SetParent(null, true);
             _particleSystem.Play();
             _particleSystem = null;
             
-            hand.DetachObject(gameObject, true);
-            hand.AttachObject(cubimal.gameObject, currentGrabTypes.GetValueOrDefault(), currentAttachmentFlags.GetValueOrDefault());
-
             yield return new WaitForSeconds(0.25f);
 
             Destroy(gameObject);

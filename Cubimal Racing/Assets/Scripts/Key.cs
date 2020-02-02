@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections;
+using UnityEngine;
 using Valve.VR.InteractionSystem;
 
 namespace EmeraldActivities.CubimalRacing
@@ -9,6 +11,7 @@ namespace EmeraldActivities.CubimalRacing
         private const float MIN_WIND_AMOUNT = 0;
         private const float MAX_WIND_AMOUNT = 1080f; // 3 full rotations
         private const float UNWIND_AMOUNT_PER_SECOND = 180f;
+        private const float AUTO_WIND_AMOUNT_PER_SECOND = 1080f;
         
         public enum KeyState
         {
@@ -16,6 +19,8 @@ namespace EmeraldActivities.CubimalRacing
             Winding,
             Unwinding
         }
+
+        public event Action OnUnwound;
 
         private float _windAmount = 0;
         public float WindAmount => _windAmount;
@@ -62,7 +67,6 @@ namespace EmeraldActivities.CubimalRacing
 
                 _grabbingHand = null;
                 _state = KeyState.Windable;
-                Debug.Log(_windAmount);
             }
         }
 
@@ -84,19 +88,33 @@ namespace EmeraldActivities.CubimalRacing
                 _windAmount = Mathf.Clamp(_windAmount - (UNWIND_AMOUNT_PER_SECOND * Time.deltaTime), MIN_WIND_AMOUNT, MAX_WIND_AMOUNT);
 
                 transform.localRotation = Quaternion.Euler(new Vector3(0f, 0f, -_windAmount));
+                
+                if (_windAmount <= 0f)
+                    OnUnwound?.Invoke();
             }
         }
 
         public void StartUnwinding()
         {
             _state = KeyState.Unwinding;
-            Debug.Log(_windAmount);
         }
 
         public void StopUnwinding()
         {
             _state = KeyState.Windable;
-            Debug.Log(_windAmount);
+        }
+
+        public IEnumerator AutoWind(float windSeconds)
+        {
+            float seconds = 0f;
+            while (seconds < windSeconds)
+            {
+                _windAmount += (AUTO_WIND_AMOUNT_PER_SECOND * Time.deltaTime) / windSeconds;
+                transform.localRotation = Quaternion.Euler(new Vector3(0f, 0f, -_windAmount));
+                
+                seconds += Time.deltaTime;
+                yield return null;
+            }
         }
     }
 }
